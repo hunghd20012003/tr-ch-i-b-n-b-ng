@@ -4,7 +4,7 @@
 #include "CommonFunction.h"
 class BaseObject
 {
-private:
+public:
 	BaseObject();
 	~BaseObject();
 	void SetRect(const int& x, const int& y)
@@ -20,7 +20,7 @@ private:
 	{
 		return p_object_;
 	}
-	bool LoadImg(std::string path, SDL_Renderer* screen);
+	 virtual bool LoadImg(std::string path, SDL_Renderer* screen);
 	void Render(SDL_Renderer* des, const SDL_Rect* clip = NULL);
 	void Free();
 protected:

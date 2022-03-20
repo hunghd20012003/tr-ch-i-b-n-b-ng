@@ -1,5 +1,7 @@
 #include "Commonfunction.h"
 #include "BaseObject.h"
+#include "Game_map.h"
+#include "MainObject.h"
 BaseObject g_background;
 bool InitData()
 {
@@ -39,7 +41,7 @@ bool InitData()
 }
 bool LoadBackground()
 {
-	bool ret = g_background.LoadImg("img//background.img", g_screen);
+	bool ret = g_background.LoadImg("nhung-anh-pokemon-dep-cute-lam-hinh-nen.jpg", g_screen);
 	if (ret == false)
 	{
 		return false;
@@ -53,16 +55,24 @@ void close()
 	g_screen = NULL;
 	SDL_DestroyWindow(g_window);
 	g_window = NULL;
-	IMG_QUIT();
+	IMG_Quit();
 	SDL_Quit();
 }
 int main(int argc, char* argv[])
 {
-	if(InitData==false)
+	if(InitData() == false)
 	{
 		return -1;
 	}
 	if(LoadBackground() == false)return -1;
+	GameMap game_map;
+	game_map.LoadMap("map:map01.des");
+	game_map.LoadTiles(g_screen);
+	MainObject p_player;
+	p_player.LoadImg("img//player_right.img", g_screen);
+	p_player.Set_clips();
+
+
 	bool Isquit = false;
 	while(Isquit==false)
 	{
@@ -72,10 +82,13 @@ int main(int argc, char* argv[])
 			{
 				Isquit= true;
 			}
+			p_player.HandleInputAction(g_event, g_screen);
 	}
 		SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR,RENDER_DRAW_COLOR);
 		SDL_RenderClear(g_screen);
 		g_background.Render(g_screen, NULL);
+		game_map.DrawMap(g_screen);
+		p_player.Show(g_screen);
 		SDL_RenderPresent(g_screen);
 	}
 	close();

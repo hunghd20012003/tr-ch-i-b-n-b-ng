@@ -1,9 +1,7 @@
-#include "Commonfunction.h"
-#include "BaseObject.h"
-#include "Game_map.h"
-#include "MainObject.h"
+#include"CommonFunction.h"
+#include"BaseObject.h"
 BaseObject g_background;
-bool InitData()
+bool initData()//
 {
 	bool success = true;
 	int ret = SDL_Init(SDL_INIT_VIDEO);
@@ -14,7 +12,8 @@ bool InitData()
 	else
 	{
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-		g_window =SDL_CreateWindow("SDL2_game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
+		g_window = SDL_CreateWindow("bubble Shooter", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
 		if (g_window == NULL)
 		{
 			success = false;
@@ -22,26 +21,27 @@ bool InitData()
 		else
 		{
 			g_screen = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
-			if (g_screen==NULL){
+			if (g_screen == NULL)
+			{
 				success = false;
-
 			}
 			else
 			{
-				SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+				SDL_SetRenderDrawColor(g_screen, COLOR_KEY_R, COLOR_KEY_G, COLOR_KEY_B, RENDER_COLOR_DRAW);
 				int imgFlags = IMG_INIT_PNG;
 				if (!(SDL_Init(imgFlags) && imgFlags))
 				{
 					success = false;
 				}
+				
 			}
 		}
 	}
 	return success;
 }
-bool LoadBackground()
+bool loadBackground()
 {
-	bool ret = g_background.LoadImg("nhung-anh-pokemon-dep-cute-lam-hinh-nen.jpg", g_screen);
+	bool ret = g_background.loadImg("z3295614631731_2aa8cbfed34d2cc3ab079e39ace2c698.jpg", g_screen);
 	if (ret == false)
 	{
 		return false;
@@ -50,7 +50,7 @@ bool LoadBackground()
 }
 void close()
 {
-	g_background.Free();
+	g_background.free();
 	SDL_DestroyRenderer(g_screen);
 	g_screen = NULL;
 	SDL_DestroyWindow(g_window);
@@ -60,36 +60,31 @@ void close()
 }
 int main(int argc, char* argv[])
 {
-	if(InitData() == false)
+	if (initData() == false)
 	{
 		return -1;
 	}
-	if(LoadBackground() == false)return -1;
-	GameMap game_map;
-	game_map.LoadMap("map:map01.des");
-	game_map.LoadTiles(g_screen);
-	MainObject p_player;
-	p_player.LoadImg("img//player_right.img", g_screen);
-	p_player.Set_clips();
+	printf("abc");
 
 
-	bool Isquit = false;
-	while(Isquit==false)
+	if (loadBackground() == false)
+	{
+		return -1;
+	}
+	bool isQuit = false;
+	while (isQuit == false)
 	{
 		while (SDL_PollEvent(g_event) != 0)
 		{
 			if (g_event->type = SDL_QUIT)
 			{
-				Isquit= true;
+				isQuit = true;
 			}
-			p_player.HandleInputAction(g_event, g_screen);
-	}
-		SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR,RENDER_DRAW_COLOR);
-		SDL_RenderClear(g_screen);
-		g_background.Render(g_screen, NULL);
-		game_map.DrawMap(g_screen);
-		p_player.Show(g_screen);
-		SDL_RenderPresent(g_screen);
+			SDL_SetRenderDrawColor(g_screen, RENDER_COLOR_DRAW, RENDER_COLOR_DRAW, RENDER_COLOR_DRAW, RENDER_COLOR_DRAW);
+			SDL_RenderClear(g_screen);
+			g_background.render(g_screen, NULL);
+			SDL_RenderPresent(g_screen);
+		}
 	}
 	close();
 	return 0;
